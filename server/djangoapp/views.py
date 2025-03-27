@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 # Create a `login_request` view to handle sign in request
+
+
 @csrf_exempt
 def login_user(request):
     # Get username and password from request.POST dictionary
@@ -35,12 +37,17 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
+
 # Create a `logout_request` view to handle sign out request
+
+
 @csrf_exempt
 def logout_request(request):
     logout(request)
     data = {"userName": request.user.username}
     return JsonResponse(data)
+
+
 # Create a `registration` view to handle sign up request
 # @csrf_exempt
 # def registration(request):
@@ -81,6 +88,8 @@ def registration(request):
     else:
         data = {"userName": username, "error": "Already Registered"}
         return JsonResponse(data)
+
+
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
 # def get_dealerships(request):
@@ -95,6 +104,8 @@ def get_dealerships(request, state="All"):
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
+
+
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
 # def get_dealer_reviews(request,dealer_id):
 # ...
@@ -112,6 +123,8 @@ def get_dealer_reviews(request, dealer_id):
         return JsonResponse({"status": 200, "reviews": reviews})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
+
+
 # Create a `get_dealer_details` view to render the dealer details
 # def get_dealer_details(request, dealer_id):
 # ...
@@ -124,6 +137,8 @@ def get_dealer_details(request, dealer_id):
         return JsonResponse({"status": 200, "dealer": dealership})
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
+
+
 # Create a `add_review` view to submit a review
 # def add_review(request):
 # ...
