@@ -1,12 +1,7 @@
 # Uncomment the required imports before adding the code
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -40,7 +35,6 @@ def login_user(request):
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
 
-
 # Create a `logout_request` view to handle sign out request
 @csrf_exempt
 def logout_request(request):
@@ -55,7 +49,6 @@ def logout_request(request):
 
 @csrf_exempt
 def registration(request):
-    
     data = json.loads(request.body)
     username = data['userName']
     password = data['password']
@@ -63,12 +56,11 @@ def registration(request):
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except:
+    except Exception:
         # If not, simply log this is a new user
         logger.debug("{} is new user".format(username))
 
@@ -153,13 +145,16 @@ def get_cars(request):
 
 
 def add_review(request):
-    if (request.user.is_anonymous == False):
+    if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
+            post_review(data)
             return JsonResponse({"status": 200})
-        except:
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+        except Exception:
+            return JsonResponse({
+                "status": 401,
+                "message": "Error in posting review"
+            })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
         
